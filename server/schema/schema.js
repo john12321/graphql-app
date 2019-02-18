@@ -1,4 +1,6 @@
 const graphql = require("graphql");
+
+//mongoose models to react interact with mongodb
 const Book = require("../models/book");
 const Author = require("../models/author");
 
@@ -13,22 +15,6 @@ const {
   GraphQLList
 } = graphql;
 
-//dummy data
-// const books = [
-//   { name: "name the wind", genre: "fantasy", id: 1, authorId: 3 },
-//   { name: "same as the wind", genre: "boring", id: 2, authorId: 1 },
-//   { name: "not likely to be the wind", genre: "horror", id: 3, authorId: 2 },
-//   { name: "rock of ages", genre: "duller", id: 4, authorId: 1 },
-//   { name: "lack of plot", genre: "horror", id: 5, authorId: 3 },
-//   { name: "breaking wind", genre: "fantasy", id: 6, authorId: 1 }
-// ];
-
-// const authors = [
-//   { name: "Billy bob", age: 400, id: 1 },
-//   { name: "Nobbo stilo", age: 4, id: 2 },
-//   { name: "Karen Hardbod", age: 26, id: 3 }
-// ];
-
 //defined first object type - the book type
 const BookType = new GraphQLObjectType({
   name: "Book",
@@ -38,13 +24,7 @@ const BookType = new GraphQLObjectType({
     genre: { type: GraphQLString },
     author: {
       type: AuthorType,
-      resolve(parent, args) {
-        // for (let i = 0; i < authors.length; i++) {
-        //   if (authors[i].id === parent.authorId) {
-        //     return authors[i];
-        //   }
-        // }
-      }
+      resolve(parent, args) {}
     }
   })
 });
@@ -57,15 +37,7 @@ const AuthorType = new GraphQLObjectType({
     age: { type: GraphQLInt },
     books: {
       type: new GraphQLList(BookType),
-      resolve(parent, args) {
-        // let arr = [];
-        // for (let i = 0; i < books.length; i++) {
-        //   if (books[i].authorId === parent.id) {
-        //     arr.push(books[i]);
-        //   }
-        // }
-        // return arr;
-      }
+      resolve(parent, args) {}
     }
   })
 });
@@ -77,25 +49,12 @@ const RootQuery = new GraphQLObjectType({
     book: {
       type: BookType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
-        //resolve func has code to get data from db other source
-        // for (let i = 0; i < books.length; i++) {
-        //   if (books[i].id === +args.id) {
-        //     return books[i];
-        //   }
-        // }
-      }
+      resolve(parent, args) {}
     },
     author: {
       type: AuthorType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
-        // for (let i = 0; i < authors.length; i++) {
-        //   if (authors[i].id === +args.id) {
-        //     return authors[i];
-        //   }
-        // }
-      }
+      resolve(parent, args) {}
     },
     books: {
       type: new GraphQLList(BookType),
@@ -112,7 +71,31 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
+const Mutation = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    addAuthor: {
+      type: AuthorType,
+      args: {
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt }
+      },
+      resolve(parent, args) {
+        // define a new local instance of Author data type (mongoose)
+        let author = new Author({
+          name: args.name,
+          age: args.age
+        });
+        //now we need to save this instance to the db
+        //when we create new instance for the data type we have access to save prop
+        return author.save();
+      }
+    }
+  }
+});
+
 //we define which query a user can use from front end
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation: Mutation
 });
