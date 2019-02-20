@@ -1,4 +1,9 @@
-#book-list {
+/* #book-list {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
+
+#book-li {
+  text-decoration: none;
+  color: blue;
+} */
