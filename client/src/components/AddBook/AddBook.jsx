@@ -46,6 +46,7 @@ class Addname extends Component {
   render() {
     return (
       <>
+        <h2>Add a book to the list</h2>
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="name">name name</label>
           <input
