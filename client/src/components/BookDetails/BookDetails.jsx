@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { graphql } from "react-apollo";
 import { getBookQuery } from "../../queries/queries";
+import "./BookDetails.css";
 
 class BookDetails extends Component {
   authorBooks = () => {
     const { book } = this.props.data;
     return book.author.books.map(element => {
-      return <h6 key={element.id}>{element.name}</h6>;
+      return <li key={element.id}>{element.name}</li>;
     });
   };
 
@@ -14,26 +15,39 @@ class BookDetails extends Component {
     const { book } = this.props.data;
     if (book) {
       return (
-        <>
-          <h3>name: {book.name}</h3>
-          <h4>book id: {book.id}</h4>
-          <h4>Author: {book.author.name}</h4>
-          <h5>Other books by {book.author.name}</h5>
-          {this.authorBooks()}
-        </>
+        <div id="book-details">
+          <section>
+            <h3>Name:</h3>
+            <p>{book.name}</p>
+          </section>
+          <section>
+            <h3>Author:</h3>
+            <p>{book.author.name}</p>
+          </section>
+          <section>
+            <h3>Book id:</h3>
+            <p>{book.id}</p>
+          </section>
+          <hr />
+          <section>
+            <h3 id="all-books-header">All books by {book.author.name}</h3>
+            {this.authorBooks()}
+          </section>
+        </div>
       );
     } else {
-      return <h4>Click a book above for details...</h4>;
+      return (
+        <>
+          <section id="book-details-none">
+            <h3>Click a book from the list</h3>
+          </section>
+        </>
+      );
     }
   };
 
   render() {
-    return (
-      <div id="book-details">
-        <h2>Book details</h2>
-        {this.renderBook()}
-      </div>
-    );
+    return <div className="book-details">{this.renderBook()}</div>;
   }
 }
 

@@ -1,3 +1,27 @@
-/* .App {
-  text-align: center;
-} */
+.App {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 0.1fr 5fr;
+  grid-template-columns: 152px 1fr;
+  grid-template-areas:
+    "header form"
+    "booklist bookdetails";
+}
+
+.header {
+  grid-area: header;
+}
+
+.book-list {
+  grid-area: booklist;
+  overflow-y: scroll;
+}
+
+.book-details {
+  grid-area: bookdetails;
+  overflow-y: scroll;
+}
+
+.form {
+  grid-area: form;
+}
