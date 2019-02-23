@@ -5,11 +5,12 @@ import {
   addBookMutation,
   getBooksQuery
 } from "../../../src/queries/queries";
+import "./AddBook.css";
 class Addname extends Component {
   state = {
-    name: "",
-    genre: "",
-    authorId: ""
+    name: null,
+    genre: null,
+    authorId: null
   };
 
   displayAuthors = () => {
@@ -33,22 +34,25 @@ class Addname extends Component {
   handleSubmit = event => {
     const { name, genre, authorId } = this.state;
     event.preventDefault();
-    this.props.addBookMutation({
-      variables: {
-        name,
-        genre,
-        authorId
-      },
-      refetchQueries: [{ query: getBooksQuery }]
-    });
+    if (name && genre) {
+      this.props.addBookMutation({
+        variables: {
+          name,
+          genre,
+          authorId
+        },
+        refetchQueries: [{ query: getBooksQuery }]
+      });
+    } else {
+      alert("You need to at least add a book name and genre!");
+    }
   };
 
   render() {
     return (
       <>
-        <h2>Add a book to the list</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="name">name name</label>
+        <form className="form" onSubmit={this.handleSubmit}>
+          <label htmlFor="name">name</label>
           <input
             name="name"
             id="name"
@@ -72,7 +76,8 @@ class Addname extends Component {
             <option>Select author</option>
             {this.displayAuthors()}
           </select>
-          <button>add </button>
+          <label />
+          <button className="form-btn">add a book </button>
         </form>
       </>
     );

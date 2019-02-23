@@ -15,11 +15,7 @@ class BookList extends Component {
     if (!data.loading) {
       return data.books.map(book => {
         return (
-          <li
-            id="book-li"
-            key={book.id}
-            onClick={() => this.handleClick(book.id)}
-          >
+          <li key={book.id} onClick={() => this.handleClick(book.id)}>
             {book.name}
           </li>
         );
@@ -33,11 +29,12 @@ class BookList extends Component {
 
   render() {
     return (
-      <div>
-        <h2>Book list</h2>
-        <ul id="book-list">{this.displayBooks()}</ul>
+      <>
+        <div className="book-list">
+          <ul id="book-list">{this.displayBooks()}</ul>
+        </div>
         <BookDetails bookId={this.state.bookId} />
-      </div>
+      </>
     );
   }
 }
